@@ -133,7 +133,17 @@ switch ($ParameterSet) {
                     powerShell.AddParameter("Credential", Credential);
                 }
 
-                var results = powerShell.Invoke();
+                System.Collections.ObjectModel.Collection<PSObject> results;
+                try
+                {
+                    results = powerShell.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(
+                        $"Failed to run Find-OpenFile on remote computer(s) '{string.Join(", ", ComputerName)}': {ex.Message}",
+                        ex);
+                }
 
                 foreach (var error in powerShell.Streams.Error)
                 {
