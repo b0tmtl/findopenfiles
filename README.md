@@ -93,6 +93,36 @@ PS C:\Users\adamr> Find-OpenFile -FilePath C:\Test
      56    50.62      74.23      10.42   15136   1 notepad
 ```
 
+## Running remotely
+
+`Find-OpenFile` can run against one or more remote computers using PowerShell remoting. The
+module does **not** need to be installed on the target computer(s) — its assembly is streamed to
+the remote session and loaded there automatically.
+
+By default the current user's credentials are used. Supply alternate credentials with
+`-Credential` (aliased as `-Credentials`).
+
+Find all open files on remote computers:
+
+```
+PS C:\> Find-OpenFile -ComputerName Server01, Server02
+```
+
+Use alternate credentials:
+
+```
+PS C:\> Find-OpenFile -ComputerName Server01 -Credential (Get-Credential)
+```
+
+Find the process locking a file on a remote computer:
+
+```
+PS C:\> Find-OpenFile -ComputerName Server01 -FilePath C:\Windows\System32\en-US\KernelBase.dll.mui
+```
+
+> PowerShell remoting (WinRM) must be enabled on the target computer(s), and your account must
+> have permission to connect.
+
 ## Source
 
 - C# Code Forked from [this repository](https://github.com/Walkman100/FileLocks)
