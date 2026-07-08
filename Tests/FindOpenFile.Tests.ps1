@@ -61,6 +61,25 @@ Describe 'Find-OpenFile Module' {
             $command = Get-Command -Name Find-OpenFile
             $command.Parameters.ContainsKey('System') | Should -Be $true
         }
+
+        It 'Should have ComputerName parameter' {
+            $command = Get-Command -Name Find-OpenFile
+            $command.Parameters.ContainsKey('ComputerName') | Should -Be $true
+        }
+
+        It 'Should have Credential parameter with Credentials alias' {
+            $command = Get-Command -Name Find-OpenFile
+            $command.Parameters.ContainsKey('Credential') | Should -Be $true
+            $command.Parameters['Credential'].Aliases | Should -Contain 'Credentials'
+        }
+
+        It 'Should expose ComputerName in all parameter sets' {
+            $command = Get-Command -Name Find-OpenFile
+            $computerNameSets = $command.Parameters['ComputerName'].ParameterSets.Keys
+            $computerNameSets | Should -Contain 'All'
+            $computerNameSets | Should -Contain 'File'
+            $computerNameSets | Should -Contain 'Process'
+        }
     }
     
     Context 'Find-OpenFile - All Parameter Set' {
